@@ -1,0 +1,267 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/ansasaki/feature-map/blob/main/schema.json",
+  "title": "Feature Map",
+  "description": "Project-agnostic schema for radial feature map visualization. Defines sectors (expansion areas), concentric rings (feasibility/timeline), and features with dependencies.",
+  "type": "object",
+  "required": ["project", "sectors", "statuses", "rings", "features"],
+  "additionalProperties": false,
+  "properties": {
+    "project": {
+      "type": "object",
+      "description": "Project metadata displayed at the center of the visualization.",
+      "required": ["name"],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Project name shown at the center of the radial diagram."
+        },
+        "description": {
+          "type": "string",
+          "description": "Short project description shown on hover or in the header."
+        },
+        "logo": {
+          "type": "string",
+          "description": "URL or relative path to a project logo image (optional)."
+        },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "description": "Link to the project's homepage or repository."
+        }
+      }
+    },
+
+    "sectors": {
+      "type": "array",
+      "description": "Angular sectors dividing the radial diagram. Each sector represents an area of expansion or concern. Features without a sector are placed in the core ring at the center.",
+      "items": {
+        "type": "object",
+        "required": ["id", "name"],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-]*$",
+            "description": "Unique identifier for the sector."
+          },
+          "name": {
+            "type": "string",
+            "description": "Human-readable sector name."
+          },
+          "description": {
+            "type": "string",
+            "description": "Explanation of what this sector covers."
+          },
+          "color": {
+            "type": "string",
+            "pattern": "^#[0-9a-fA-F]{6}$",
+            "description": "Hex color for the sector wedge and its features."
+          }
+        }
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+
+    "statuses": {
+      "type": "array",
+      "description": "Possible feature statuses. Drives the status filter and node styling.",
+      "items": {
+        "type": "object",
+        "required": ["id", "label"],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-]*$",
+            "description": "Unique identifier for the status."
+          },
+          "label": {
+            "type": "string",
+            "description": "Human-readable status label."
+          },
+          "color": {
+            "type": "string",
+            "pattern": "^#[0-9a-fA-F]{6}$",
+            "description": "Hex color for features with this status."
+          },
+          "symbol": {
+            "type": "string",
+            "description": "Optional symbol/icon character (e.g. unicode) shown on the node."
+          }
+        }
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+
+    "rings": {
+      "type": "array",
+      "description": "Concentric rings from center outward. Each ring represents a feasibility level or timeline horizon. Order matters: first item is innermost ring (e.g. 'implemented'), last is outermost (e.g. 'long-term / blocked').",
+      "items": {
+        "type": "object",
+        "required": ["id", "label"],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-]*$",
+            "description": "Unique identifier for the ring."
+          },
+          "label": {
+            "type": "string",
+            "description": "Human-readable ring label (e.g. 'Implemented', 'High Feasibility')."
+          },
+          "description": {
+            "type": "string",
+            "description": "Explanation of what this ring level means."
+          }
+        }
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+
+    "components": {
+      "type": "array",
+      "description": "Project components that features can belong to. Drives the component filter.",
+      "items": {
+        "type": "object",
+        "required": ["id", "label"],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-]*$",
+            "description": "Unique identifier for the component."
+          },
+          "label": {
+            "type": "string",
+            "description": "Human-readable component name."
+          }
+        }
+      },
+      "uniqueItems": true
+    },
+
+    "tags": {
+      "type": "array",
+      "description": "Free-form tags for cross-cutting concerns. Drives the tag filter.",
+      "items": {
+        "type": "object",
+        "required": ["id", "label"],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-]*$",
+            "description": "Unique identifier for the tag."
+          },
+          "label": {
+            "type": "string",
+            "description": "Human-readable tag label."
+          }
+        }
+      },
+      "uniqueItems": true
+    },
+
+    "features": {
+      "type": "array",
+      "description": "All features in the project, both implemented and planned.",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "status", "ring"],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-]*$",
+            "description": "Unique identifier for the feature."
+          },
+          "name": {
+            "type": "string",
+            "description": "Short feature name shown on the node."
+          },
+          "description": {
+            "type": "string",
+            "description": "Longer description shown on hover or in detail panel."
+          },
+          "sector": {
+            "type": "string",
+            "description": "Sector ID this feature belongs to. Omit for core features placed at the center."
+          },
+          "status": {
+            "type": "string",
+            "description": "Status ID from the statuses array."
+          },
+          "ring": {
+            "type": "string",
+            "description": "Ring ID from the rings array. Determines radial distance from center."
+          },
+          "components": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Component IDs this feature involves."
+          },
+          "tags": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Tag IDs for cross-cutting classification."
+          },
+          "dependencies": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Feature IDs that this feature depends on (must be completed first)."
+          },
+          "blockers": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "internal": {
+                "type": "array",
+                "items": { "type": "string" },
+                "description": "Internal blockers (things the project team controls)."
+              },
+              "external": {
+                "type": "array",
+                "items": { "type": "string" },
+                "description": "External blockers (third-party dependencies, standards, etc.)."
+              }
+            },
+            "description": "Blocking factors preventing work on this feature."
+          },
+          "value": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "User-facing value propositions (shown in detail view)."
+          },
+          "links": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["label", "url"],
+              "additionalProperties": false,
+              "properties": {
+                "label": {
+                  "type": "string",
+                  "description": "Link text."
+                },
+                "url": {
+                  "type": "string",
+                  "format": "uri",
+                  "description": "Link URL."
+                }
+              }
+            },
+            "description": "Related links (PRs, issues, RFCs, docs)."
+          }
+        }
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    }
+  }
+}

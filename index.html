@@ -215,7 +215,7 @@ function init() {
 
   // Init filter state
   data.sectors.forEach(s => state.sectors[s.id] = true);
-  data.statuses.forEach(s => state.statuses[s.id] = true);
+  data.statuses.forEach(s => state.statuses[s.id] = (s.id !== 'implemented' && s.id !== 'deprecated'));
   if (data.components) data.components.forEach(c => state.components[c.id] = true);
   if (data.tags) data.tags.forEach(t => state.tags[t.id] = true);
   state.ringMax = data.rings.length - 1;
@@ -356,7 +356,7 @@ function toggleFilter(kind, id) {
 
 function resetFilters() {
   data.sectors.forEach(s => state.sectors[s.id] = true);
-  data.statuses.forEach(s => state.statuses[s.id] = true);
+  data.statuses.forEach(s => state.statuses[s.id] = (s.id !== 'implemented' && s.id !== 'deprecated'));
   if (data.components) data.components.forEach(c => state.components[c.id] = true);
   if (data.tags) data.tags.forEach(t => state.tags[t.id] = true);
   state.ringMax = data.rings.length - 1;

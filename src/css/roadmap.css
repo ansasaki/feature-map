@@ -1,0 +1,30 @@
+/* === Roadmap-specific styles === */
+
+/* View toggle (Radial / Timeline) */
+#view-toggle{position:absolute;top:12px;left:12px;display:flex;gap:0;z-index:8;
+  border-radius:8px;overflow:hidden;box-shadow:0 1px 4px var(--card-shadow);border:1px solid var(--border-light)}
+#view-toggle button{padding:6px 16px;border:none;background:var(--panel-bg);color:var(--text-secondary);
+  font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;font-family:inherit}
+#view-toggle button:not(:last-child){border-right:1px solid var(--border-light)}
+#view-toggle button.active{background:var(--accent);color:#fff}
+#view-toggle button:hover:not(.active){background:var(--hover-bg)}
+
+/* Diagram container */
+#diagram-container{flex:1;display:flex;align-items:center;justify-content:center;position:relative}
+#diagram-container svg{display:block}
+
+/* Legend */
+#legend{position:absolute;bottom:0;left:0;right:0;background:var(--panel-bg);
+  box-shadow:0 -2px 12px var(--card-shadow);z-index:5;max-height:0;overflow:hidden;
+  transition:max-height .3s ease,padding .3s ease;padding:0 20px}
+#legend.open{max-height:200px;padding:14px 20px}
+#legend-toggle{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);
+  background:var(--panel-bg);border:1px solid var(--border-light);border-radius:20px;padding:4px 16px;
+  font-size:12px;cursor:pointer;color:var(--text-secondary);z-index:6;box-shadow:0 1px 4px var(--card-shadow)}
+#legend-toggle:hover{background:var(--hover-bg)}
+#legend-content{display:flex;gap:32px;flex-wrap:wrap}
+.legend-group{display:flex;flex-direction:column;gap:4px}
+.legend-group h4{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:2px}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--tag-color)}
+.legend-swatch{width:14px;height:14px;border-radius:50%;flex-shrink:0}
+.legend-line{width:20px;height:2px;flex-shrink:0;border-radius:1px}

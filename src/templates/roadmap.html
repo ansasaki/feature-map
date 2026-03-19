@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Roadmap — Feature Map</title>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<style>
+{{FILE:src/css/shared.css}}
+{{FILE:src/css/roadmap.css}}
+</style>
+</head>
+<body>
+<nav id="top-nav">
+  <div class="nav-brand" id="nav-brand">Feature Map</div>
+  <div class="nav-links">
+    <a href="index.html" class="nav-link">Features</a>
+    <a href="roadmap.html" class="nav-link active">Roadmap</a>
+  </div>
+</nav>
+<div id="app">
+  <div id="sidebar"></div>
+  <div id="main">
+    <div id="view-toggle">
+      <button class="active" data-view="radial">Radial</button>
+      <button data-view="timeline">Timeline</button>
+    </div>
+    <div id="diagram-container"></div>
+    <div id="detail-panel"><button id="detail-close">&times;</button><div id="detail-content"></div></div>
+    <button id="legend-toggle">Legend</button>
+    <div id="legend"><div id="legend-content"></div></div>
+    <div id="tooltip"></div>
+    <div id="error-msg"></div>
+  </div>
+</div>
+<script>
+{{FILE:src/js/shared.js}}
+</script>
+<script>
+{{FILE:src/js/roadmap.js}}
+</script>
+</body>
+</html>

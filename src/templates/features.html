@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Features — Feature Map</title>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<style>
+{{FILE:src/css/shared.css}}
+{{FILE:src/css/features.css}}
+</style>
+</head>
+<body>
+<nav id="top-nav">
+  <div class="nav-brand" id="nav-brand">Feature Map</div>
+  <div class="nav-links">
+    <a href="index.html" class="nav-link active">Features</a>
+    <a href="roadmap.html" class="nav-link">Roadmap</a>
+  </div>
+</nav>
+<div id="app">
+  <div id="sidebar"></div>
+  <div id="main">
+    <div id="controls-bar">
+      <input type="text" id="search-input" placeholder="Search features...">
+      <div id="group-controls">
+        <label for="group-select">Group by:</label>
+        <select id="group-select">
+          <option value="sector">Sector</option>
+          <option value="status">Status</option>
+          <option value="ring">Ring</option>
+          <option value="none">None</option>
+        </select>
+      </div>
+      <span id="feature-count"></span>
+    </div>
+    <div id="features-container"></div>
+    <div id="detail-panel"><button id="detail-close">&times;</button><div id="detail-content"></div></div>
+    <div id="error-msg"></div>
+  </div>
+</div>
+<script>
+{{FILE:src/js/shared.js}}
+</script>
+<script>
+{{FILE:src/js/features.js}}
+</script>
+</body>
+</html>

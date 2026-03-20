@@ -26,6 +26,36 @@ function matchesSearch(f) {
   return terms.every(function(term) { return haystack.indexOf(term) >= 0; });
 }
 
+// Assign distinct colors to ring badges based on position (inner→outer).
+// Uses a green→blue→amber→red progression that conveys timeline/feasibility.
+var RING_PALETTE = [
+  {bg: '#dcfce7', fg: '#166534'},  // green  – core / implemented
+  {bg: '#dbeafe', fg: '#1e40af'},  // blue   – near-term
+  {bg: '#fef3c7', fg: '#92400e'},  // amber  – mid-term
+  {bg: '#fee2e2', fg: '#991b1b'},  // red    – long-term / blocked
+  {bg: '#f3e8ff', fg: '#6b21a8'},  // purple – extra
+  {bg: '#e0f2fe', fg: '#075985'},  // sky    – extra
+];
+var RING_PALETTE_DARK = [
+  {bg: '#166534', fg: '#bbf7d0'},
+  {bg: '#1e3a5f', fg: '#bfdbfe'},
+  {bg: '#78350f', fg: '#fde68a'},
+  {bg: '#7f1d1d', fg: '#fecaca'},
+  {bg: '#581c87', fg: '#e9d5ff'},
+  {bg: '#0c4a6e', fg: '#bae6fd'},
+];
+
+function ringColor(index, total) {
+  var dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  var palette = dark ? RING_PALETTE_DARK : RING_PALETTE;
+  if (index < palette.length) return palette[index];
+  // For extra rings beyond the palette, generate from hue
+  var hue = (index * 360 / total) % 360;
+  return dark
+    ? {bg: 'hsl(' + hue + ',40%,25%)', fg: 'hsl(' + hue + ',60%,80%)'}
+    : {bg: 'hsl(' + hue + ',60%,90%)', fg: 'hsl(' + hue + ',60%,25%)'};
+}
+
 function renderFeatures() {
   var container = d3.select('#features-container');
   container.html('');
@@ -77,7 +107,10 @@ function renderFeatures() {
       hdr.append('span').attr('class', 'card-status').style('background', st.color || '#888')
         .text(st.label || f.status);
       if (ring) {
-        hdr.append('span').attr('class', 'card-ring').text(ring.label);
+        var rc = ringColor(ring.index, FM.data.rings.length);
+        hdr.append('span').attr('class', 'card-ring')
+          .style('background', rc.bg).style('color', rc.fg)
+          .text(ring.label);
       }
       if (sec) {
         hdr.append('span').attr('class', 'card-sector').style('color', sec.color || '#888').text(sec.name);
@@ -162,10 +195,11 @@ function buildGroups(features) {
   }
 
   if (groupBy === 'ring') {
-    FM.data.rings.forEach(function(r) {
+    FM.data.rings.forEach(function(r, i) {
       var sf = features.filter(function(f) { return f.ring === r.id; });
       if (sf.length) {
-        groups.push({label: r.label, desc: r.description, features: sf});
+        var rc = ringColor(i, FM.data.rings.length);
+        groups.push({label: r.label, color: rc.bg, desc: r.description, features: sf});
       }
     });
     return groups;

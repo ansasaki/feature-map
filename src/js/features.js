@@ -144,6 +144,10 @@ function renderFeatures() {
         footer.append('span').attr('class', 'card-dep-indicator')
           .html('\u2192 unlocks ' + FM.unlocks[f.id].length);
       }
+      if (f.links && f.links.length) {
+        footer.append('span').attr('class', 'card-link-indicator')
+          .html('\uD83D\uDD17 ' + f.links.length + ' link' + (f.links.length > 1 ? 's' : ''));
+      }
 
       card.on('click', function() {
         if (FM.state.pinned === f.id) {
